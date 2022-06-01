@@ -1,0 +1,292 @@
+#!/bin/bash
+
+stack=()
+old_stack=()
+top=-1
+
+while ISF= read -r input
+do
+    if [[ "$input" =~ ^[0-9223372036854775807]+$ ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="$input"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "+" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="+"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "&" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="&"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "|" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="|"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "^" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="^"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "s" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="s"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "e" ]]
+    then
+	if [[ "${stack[$top]}" = "+" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] + stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+	elif [[ "${stack[$top]}" = "&" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] & stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "|" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] | stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "^" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] ^ stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "s" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top]=stack[top-1]
+	    stack[top-1]=stack[top-2]
+	    stack[top-2]=stack[top]
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "d" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    unset stack[top]
+	    unset stack[top-1]
+	    top=$((top-2))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+	fi
+
+    elif [[ "$input" = "p" ]]
+    then
+	echo "${stack[*]} p"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "d" ]]
+    then
+	old_stack=("${stack[@]}")
+	unset stack[top]
+	top=$((top-1))
+	echo "${old_stack[*]} d"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "u" ]]
+    then
+	top=$((${#old_stack[@]} - 1))
+	echo "${stack[*]} u"
+	stack=("${old_stack[@]}")
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "x" ]]
+    then
+	break
+    fi
+done < input.txt
+
+
+
+while true
+do
+    read -p "> " input
+    if [[ "$input" =~ ^[0-9223372036854775807]+$ ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="$input"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "+" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="+"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "&" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="&"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "|" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="|"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "^" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="^"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "s" ]]
+    then
+	top=$((top+1))
+	old_stack=("${stack[@]}")
+	stack[top]="s"
+	echo "${old_stack[*]}"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "e" ]]
+    then
+	if [[ "${stack[$top]}" = "+" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] + stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+	elif [[ "${stack[$top]}" = "&" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] & stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "|" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] | stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "^" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top-2]=$((stack[top-1] ^ stack[top-2]))
+	    unset stack[top]
+	    top=$((top-1))
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "s" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    stack[top]=stack[top-1]
+	    stack[top-1]=stack[top-2]
+	    stack[top-2]=stack[top]
+	    unset stack[top]
+	    top=$((top-1))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+
+	elif [[ "${stack[$top]}" = "d" ]]
+	then
+	    old_stack=("${stack[@]}")
+	    unset stack[top]
+	    unset stack[top-1]
+	    top=$((top-2))
+	    echo "${old_stack[*]} e"
+	    echo "${stack[*]}"
+	fi
+
+    elif [[ "$input" = "p" ]]
+    then
+	echo "${stack[*]} p"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "d" ]]
+    then
+	old_stack=("${stack[@]}")
+	unset stack[top]
+	top=$((top-1))
+	echo "${old_stack[*]} d"
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "u" ]]
+    then
+	top=$((${#old_stack[@]} - 1))
+	echo "${stack[*]} u"
+	stack=("${old_stack[@]}")
+	echo "${stack[*]}"
+
+    elif [[ "$input" = "x" ]]
+    then
+	break
+    fi
+done
